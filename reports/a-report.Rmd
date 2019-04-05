@@ -12,6 +12,82 @@ source(here::here("code/lib.R"))
 theme_set(theme_bw())
 ```
 
-```{r read}
+```{r read, echo=FALSE}
 atividade = read_projectdata()
 ```
+
+Audiência: Para os próprios partidos, dados servem para determinar sua influência no twitter.
+
+Quais parlamentares possuem mais retweets?
+
+    Os do PT e o PSL por possuirem as maiores bancadas de parlamentares.
+
+```{r}
+top5 <- atividade %>% group_by(partido) %>%  summarise(contagem = n()) %>% arrange(-contagem) %>% top_n(5)
+
+atividade %>% 
+  filter(partido %in%  (top5 %>% pull(partido))) %>% 
+  ggplot(aes(n_proprio, n_retweet, label = twitter, color = partido)) +
+  geom_text(check_overlap = TRUE)
+  
+
+```
+
+
+Quais partidos possuem mais retweets?
+(OBS.: Proporção pela quantidade de parlamentares)
+    
+    PT e PSL
+    
+```{r}
+
+```
+
+
+Quais parlamentares possuem maior engajamento total?
+    
+    Parlamentares que foram eleitos com maior numero de votos.
+
+```{r}
+
+```
+
+
+Quais UFs possuem maior atividade no twitter?
+
+    Os estados do Sul, por possuirem maior facilidade de acesso à rede.
+
+
+```{r}
+
+```
+
+
+Quais parlamentares possuem uma maior popularidade no twitter? Maior quantidade de seguidores?
+
+    Parlamentares do Sul por possuirem maior quantidade de pessoas conectadas.
+
+
+```{r}
+
+```
+
+
+Quais partidos possuem maior proporção de parlamentares no twitter?
+(OBS:Não pode ser quantitativo pois partidos possuem quantidades diferentes de parlamentares).
+
+    PT e PSL, pois possuem  a maior bancada de parlamentares
+
+```{r}
+
+```
+
+
+Que partidos possuem maior popularidade?
+
+    PT e PSL
+
+```{r}
+
+```
+
