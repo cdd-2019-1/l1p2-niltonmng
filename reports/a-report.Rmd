@@ -80,6 +80,11 @@ Quais parlamentares possuem uma maior popularidade no twitter? Maior quantidade 
 
 ```{r}
 
+atividade %>% 
+  filter(partido %in%  (top5 %>% pull(partido))) %>% 
+  ggplot(aes(n_proprio, seguidores, label = twitter, color = partido)) +
+  geom_text(check_overlap = TRUE)
+
 ```
 
 
@@ -99,5 +104,9 @@ Que partidos possuem maior popularidade?
 
 ```{r}
 
+atividade %>% 
+  filter(partido %in%  (top5 %>% pull(partido))) %>% 
+  ggplot(aes(n_proprio, n_retweet, label = twitter, color = partido)) +
+  geom_text(check_overlap = TRUE)
 ```
 
