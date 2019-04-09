@@ -22,8 +22,8 @@ Quais parlamentares possuem mais retweets?
 
     Os do PT e o PSL por possuirem as maiores bancadas de parlamentares.
     
-    A partir da analise dos gráfico, observamos que confirmamos a teoria de que os parlamentares que possuem 
-    mais retweets são aqueles que pertencem aos partifos do PT e PSL.
+    A partir da analise dos gráficos, observamos que confirmamos a teoria de que os parlamentares que possuem 
+    mais retweets são aqueles que pertencem aos partidos do PT e PSL.
 
 ```{r}
 top5 <- atividade %>% group_by(partido) %>%  summarise(contagem = n()) %>% arrange(-contagem) %>% top_n(5)
@@ -109,4 +109,23 @@ atividade %>%
   ggplot(aes(n_proprio, n_retweet, label = twitter, color = partido)) +
   geom_text(check_overlap = TRUE)
 ```
+
+
+Pergunta de: Nilton Ginani, Tiago Pereira, João Costa
+
+Qual a propoprção de parlamentares dos partidos PT e PSL para cada estado?
+
+```{r}
+
+top5novo <- atividade %>% group_by(partido, UF) %>%  summarise(contagem = n()) %>% arrange(-contagem) %>% top_n(5)
+
+atividade %>% group_by(UF,partido) %>%  summarise(contagem = n()) %>% arrange(-contagem) %>% top_n(5)
+
+atividade %>% 
+  filter(partido %in%  (top5novo %>% pull(partido))) %>% 
+  ggplot(aes(partido, UF, label = twitter, color = partido)) +
+  geom_text(check_overlap = TRUE)
+
+```
+
 
