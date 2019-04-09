@@ -21,6 +21,9 @@ Audiência: Para os próprios partidos, dados servem para determinar sua influê
 Quais parlamentares possuem mais retweets?
 
     Os do PT e o PSL por possuirem as maiores bancadas de parlamentares.
+    
+    A partir da analise dos gráfico, observamos que confirmamos a teoria de que os parlamentares que possuem 
+    mais retweets são aqueles que pertencem aos partifos do PT e PSL.
 
 ```{r}
 top5 <- atividade %>% group_by(partido) %>%  summarise(contagem = n()) %>% arrange(-contagem) %>% top_n(5)
@@ -47,8 +50,15 @@ Quais partidos possuem mais retweets?
 Quais parlamentares possuem maior engajamento total?
     
     Parlamentares que foram eleitos com maior numero de votos.
+    
+    A partir do grafico abaixo, observamos que os parlamentares com maior engajamento são aqueles que pertencem ao partido do PSL.
 
 ```{r}
+
+atividade %>% 
+  filter(partido %in%  (top5 %>% pull(partido))) %>% 
+  ggplot(aes(n_proprio, engaj_total, label = twitter, color = partido)) +
+  geom_text(check_overlap = TRUE)
 
 ```
 
