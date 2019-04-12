@@ -118,10 +118,6 @@ Qual a propoprção de parlamentares dos partidos PT e PSL para cada estado?
 
 ```{r echo=FALSE}
 
-soma <- atividade %>% 
-  group_by(UF) %>% 
-  summarize(contagem = n())
-
 partidos <- atividade %>% 
   group_by(UF, partido) %>%  
   summarise(contagem = n()) %>% 
@@ -139,14 +135,19 @@ partidosProp = partidos %>%
 
 
 partidosProp %>% 
-  ggplot(aes(x = propPSL, y = propPT)) + 
-  geom_point(color = "#24C62D") + 
-  geom_rug(alpha = .7, color = "blue", sides = "l")
+  ggplot() + 
+  geom_point(aes(x =UF, y = propPT, color = "PT")) +
+  geom_point(aes(x =UF, y = propPSL, color = "PSL")) +
+  labs(x = "UF",
+       y = "Porporção de partidos",
+       title = "Proporção de deputados PT vs PSL por UF",
+       colour = "Partidos")
 
 partidosProp %>% 
   ggplot(aes(x = UF, y = propPT)) + 
   geom_point(color = "red") + 
   geom_rug(alpha = .7, color = "black", sides = "l")
+  
 
 partidosProp %>% 
   ggplot(aes(x = UF, y = propPSL)) + 
