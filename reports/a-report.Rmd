@@ -10,6 +10,7 @@ theme: sandstone
 library(tidyverse)
 source(here::here("code/lib.R"))
 theme_set(theme_bw())
+options(scipen = 999)
 ```
 
 ```{r read, echo=FALSE}
@@ -115,17 +116,42 @@ Pergunta de: Nilton Ginani, Tiago Pereira, João Costa
 
 Qual a propoprção de parlamentares dos partidos PT e PSL para cada estado?
 
-```{r}
+```{r echo=FALSE}
 
-top5novo <- atividade %>% group_by(partido, UF) %>%  summarise(contagem = n()) %>% arrange(-contagem) %>% top_n(5)
+soma <- atividade %>% 
+  group_by(UF) %>% 
+  summarize(contagem = n())
 
-atividade %>% group_by(UF,partido) %>%  summarise(contagem = n()) %>% arrange(-contagem) %>% top_n(5)
+partidos <- atividade %>% 
+  group_by(UF, partido) %>%  
+  summarise(contagem = n()) %>% 
+  filter(partido == "PSL" | partido == "PT") %>% 
+  arrange(-contagem) %>% 
+  ungroup() %>% # desagrupar grupos de group by para eventuais bugs
+  complete(UF, partido, fill = list(contagem = 0)) %>% 
+  spread(partido, contagem)
 
-atividade %>% 
-  filter(partido %in%  (top5novo %>% pull(partido))) %>% 
-  ggplot(aes(partido, UF, label = twitter, color = partido)) +
-  geom_text(check_overlap = TRUE)
 
+partidosProp = partidos %>% 
+  left_join(soma, by = "UF") %>% 
+  mutate(propPSL = PSL/contagem,
+         propPT = PT/contagem)
+
+
+partidosProp %>% 
+  ggplot(aes(x = propPSL, y = propPT)) + 
+  geom_point(color = "#24C62D") + 
+  geom_rug(alpha = .7, color = "blue", sides = "l")
+
+partidosProp %>% 
+  ggplot(aes(x = UF, y = propPT)) + 
+  geom_point(color = "red") + 
+  geom_rug(alpha = .7, color = "black", sides = "l")
+
+partidosProp %>% 
+  ggplot(aes(x = UF, y = propPSL)) + 
+  geom_point(color = "#24C62D") + 
+  geom_rug(alpha = .7, color = "black", sides = "l")
 ```
 
 
